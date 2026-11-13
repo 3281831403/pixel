@@ -146,19 +146,32 @@ func (td *TrianglesData) ClipRect(i int) (rect Rect, has bool) {
 //
 // The format of the pixels is color.RGBA and not pixel.RGBA for a very serious reason:
 // pixel.RGBA takes up 8x more memory than color.RGBA.
+//
+// PictureData is also a fully functional off-screen Target (and ComposeTarget) without any OpenGL
+// dependency. Sprite, Batch, IMDraw and text.Text can all be drawn directly onto it; the result is
+// rasterized into Pix, sampled at pixel centers.
 type PictureData struct {
 	Pix    []color.RGBA
 	Stride int
 	Rect   Rect
+
+	mat Matrix
+	col RGBA
+	cmp ComposeMethod
 }
 
 // MakePictureData creates a zero-initialized PictureData covering the given rectangle.
+//
+// The returned PictureData is ready to be drawn onto: it uses the identity matrix and a fully
+// opaque white color mask by default.
 func MakePictureData(rect Rect) *PictureData {
 	w := int(math.Ceil(rect.Max.X)) - int(math.Floor(rect.Min.X))
 	h := int(math.Ceil(rect.Max.Y)) - int(math.Floor(rect.Min.Y))
 	pd := &PictureData{
 		Stride: w,
 		Rect:   rect,
+		mat:    IM,
+		col:    Alpha(1),
 	}
 	pd.Pix = make([]color.RGBA, w*h)
 	return pd

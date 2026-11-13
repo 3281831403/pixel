@@ -1,3 +1,6 @@
+//go:build gltest
+// +build gltest
+
 package pixel_test
 
 import (
@@ -15,7 +18,7 @@ import (
 // onePixelImage is the byte representation of a 1x1 solid white png file
 var onePixelImage = []byte{
 	137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2,
-	0, 0, 0, 144, 119, 83, 222, 0, 0, 1, 130, 105, 67, 67, 80, 73, 67, 67, 32, 112, 114, 111, 102, 105, 108, 101, 0,
+	0, 0, 0, 144, 119, 83, 222, 0, 0, 1, 130, 105, 67, 67, 80, 73, 67, 67, 32, 112, 114, 111, 103, 105, 108, 101, 0,
 	0, 40, 145, 125, 145, 59, 72, 3, 65, 20, 69, 143, 73, 68, 17, 37, 133, 41, 68, 44, 182, 80, 43, 5, 81, 17, 75,
 	141, 66, 16, 34, 132, 168, 96, 212, 194, 221, 141, 137, 66, 118, 13, 187, 9, 54, 150, 130, 109, 192, 194, 79,
 	227, 175, 176, 177, 214, 214, 194, 86, 16, 4, 63, 32, 54, 182, 86, 138, 54, 18, 214, 55, 73, 32, 65, 140, 3,
@@ -38,6 +41,8 @@ var onePixelImage = []byte{
 	77, 211, 95, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
 }
 
+// TestMain boots the GL main thread. Only compiled when the "gltest" build tag is set,
+// so headless CI machines without OpenGL can still run the default test suite.
 func TestMain(m *testing.M) {
 	pixelgl.Run(func() {
 		os.Exit(m.Run())
